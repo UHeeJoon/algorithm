@@ -1,4 +1,4 @@
-# baekjoon
+# Baekjoon
 [dbgmlwns2](https://www.acmicpc.net/user/dbgmlwns2)
 
 # Programmers
