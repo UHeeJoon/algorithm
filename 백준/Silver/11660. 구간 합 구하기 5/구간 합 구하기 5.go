@@ -15,15 +15,13 @@ func main() {
 	defer writer.Flush()
 	var n, m int
 	fmt.Fscanln(reader, &n, &m)
-	var arr = make([][]int, n)
 	var dp = make([][]int, n+1)
 	dp[0] = make([]int, n+1)
-	for i := 0; i < n; i++ {
-		arr[i] = make([]int, n)
-		dp[i+1] = make([]int, n+1)
-		for j := 0; j < n; j++ {
-			fmt.Fscan(reader, &arr[i][j])
-			dp[i+1][j+1] = arr[i][j] + dp[i+1][j] + dp[i][j+1] - dp[i][j]
+	for i := 1; i <= n; i++ {
+		dp[i] = make([]int, n+1)
+		for j := 1; j <= n; j++ {
+			fmt.Fscan(reader, &dp[i][j])
+			dp[i][j] += dp[i-1][j] + dp[i][j-1] - dp[i-1][j-1]
 		}
 	}
 	var x1, y1, x2, y2 int
