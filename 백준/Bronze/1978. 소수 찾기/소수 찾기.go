@@ -3,7 +3,6 @@ package main
 import (
 	"bufio"
 	"fmt"
-	"math"
 	"os"
 	"strconv"
 	"strings"
@@ -22,7 +21,7 @@ func main() {
 		count  = 0
 	)
 	primes[1] = true
-	for i := 2; i <= int(math.Sqrt(1000)); i++ {
+	for i := 2; i*i <= 1000; i++ {
 		if primes[i] {
 			continue
 		}
