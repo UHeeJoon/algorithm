@@ -24,8 +24,8 @@ func main() {
 	defer writer.Flush()
 	var n int
 	fmt.Fscan(reader, &n)
-	var dp = make([]int, n+6)
-	for i := 0; i < n+6; i++ {
+	var dp = make([]int, n+3)
+	for i := 0; i < n+3; i++ {
 		dp[i] = DP_DEFAULT
 	}
 	dp[3] = 1
