@@ -12,23 +12,45 @@ var (
 	writer = bufio.NewWriter(os.Stdout)
 )
 
+func readLine() string {
+	input, _ := reader.ReadString('\n')
+	return input
+}
+
+func input() string {
+	_ = readLine()                       // n isn't used
+	return strings.TrimSpace(readLine()) // return k
+}
+
+func countNumbers(num int, o, e *int) {
+	if (num & 1) == 1 {
+		*o++ // increase odd number
+		return
+	}
+	*e++ // increase even number
+}
+
+func countOddAndEven(str string) (int, int) {
+    odd, even := 0, 0 // variables
+	for _, num := range str {
+		countNumbers(int(num), &odd, &even)
+	}
+	return odd, even
+}
+
+func isOddGreaterThanEven(odd, even int) int {
+	if even < odd {
+		return 1
+	}
+	if odd < even {
+		return 0
+	}
+	return -1
+}
+
 func main() {
 	defer writer.Flush()
-	reader.ReadString('\n')
-	input, _ := reader.ReadString('\n')
-	input = strings.TrimSpace(input)
-	odd, even, ans := 0, 0, -1
-	for _, num := range input {
-		if (num & 1) == 1 {
-			odd++
-		} else {
-			even++
-		}
-	}
-	if even < odd {
-		ans = 1
-	} else if odd < even {
-		ans = 0
-	}
-	fmt.Fprintln(writer, ans)
+	odd, even := countOddAndEven(input())
+	result := isOddGreaterThanEven(odd, even)
+	fmt.Fprintln(writer, result)
 }
