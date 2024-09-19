@@ -5,26 +5,19 @@ fn main() {
     io::stdout().flush().unwrap();
 
     let input = read(&mut reader);
-    let mut sum: i32 = 0i32;
-    for str in input.chars() {
-        if "ABC".contains(str) {
-            sum += 3;
-        } else if "DEF".contains(str) {
-            sum += 4;
-        } else if "GHI".contains(str) {
-            sum += 5;
-        } else if "JKL".contains(str) {
-            sum += 6;
-        } else if "MNO".contains(str) {
-            sum += 7;
-        } else if "PQRS".contains(str) {
-            sum += 8;
-        } else if "TUV".contains(str) {
-            sum += 9;
-        } else if "WXYZ".contains(str) {
-            sum += 10;
-        }
-    }
+    let sum: i32 = input.chars()
+        .map(|c| match c {
+            'A' | 'B' | 'C' => 3,
+            'D' | 'E' | 'F' => 4,
+            'G' | 'H' | 'I' => 5,
+            'J' | 'K' | 'L' => 6,
+            'M' | 'N' | 'O' => 7,
+            'P' | 'Q' | 'R' | 'S' => 8,
+            'T' | 'U' | 'V' => 9,
+            'W' | 'X' | 'Y' | 'Z' => 10,
+            _ => 0, // 다른 문자는 0점 처리
+        })
+        .sum();
     println!("{sum}");
 }
 
