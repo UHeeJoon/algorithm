@@ -1,3 +1,4 @@
+use std::cmp::min;
 use std::io::{self, BufRead, BufReader, Write};
 
 fn main() {
@@ -6,18 +7,8 @@ fn main() {
     let mut input: String = String::new();
     reader.read_line(&mut input).unwrap();
     // =====
-    let final_string = input.chars()
-        .fold(String::new(),
-              |mut acc, cur|
-                  if acc.len() == 10 {
-                      println!("{acc}");
-                      cur.to_string()
-                  } else {
-                      acc.push(cur);
-                      acc
-                  },
-        );
-    if !final_string.is_empty() {
-        println!("{final_string}");
+
+    for i in (0..input.len()).step_by(10)  {
+        println!("{}", &input[i..min(i + 10, input.len())]);
     }
 }
