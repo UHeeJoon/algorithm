@@ -10,10 +10,8 @@ fn main() {
     (0..num).for_each(|_| {
         let mut input: String = String::new();
         reader.read_line(&mut input).unwrap();
-        
-        let split: Vec<&str> = input.split(",").collect();
-        println!("{}",
-             split[0].trim().parse::<i32>().unwrap() + split[1].trim().parse::<i32>().unwrap()
-        );
+
+        let sum: i32 = input.split(",").map(str::trim).flat_map(str::parse::<i32>).sum::<i32>();
+        println!("{}", sum);
     })
 }
