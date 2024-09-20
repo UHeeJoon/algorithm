@@ -11,17 +11,10 @@ fn main() {
     let mut list: Vec<String> = (0..num).map(|_| {
         input.clear();
         reader.read_line(&mut input).unwrap();
-        input.clone().trim().to_string()
+        input.to_owned().trim().to_string()
     }).collect();
 
-    let cmp = |a: &String, b: &String| {
-        if a.len() != b.len() {
-            a.len().cmp(&b.len())
-        } else {
-            a.chars().cmp(b.chars())
-        }
-    };
-    list.sort_by(cmp);
+    list.sort_unstable_by_key(|key| (key.len(), key.clone()));
     list.dedup();
-    list.iter().for_each(|l| println!("{l}"));
+    println!("{}", list.join("\n"));
 }
