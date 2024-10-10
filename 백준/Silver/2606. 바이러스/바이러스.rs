@@ -1,39 +1,43 @@
 use std::io::{self, BufRead, BufReader};
 
 fn main() {
-    let mut reader = BufReader::new(io::stdin().lock());
-    let mut n: String = String::new();
-    let mut input: String = String::new();
-    reader.read_line(&mut n).unwrap();
-    reader.read_line(&mut input).unwrap();
+    let reader = BufReader::new(io::stdin().lock());
+    let mut lines = reader.lines();
 
-    let n: usize = n.trim().parse::<usize>().unwrap();
-    let mut graph: Vec<Vec<i32>> = vec![vec![0; n + 1]; n + 1];
-    let mut visited: Vec<bool> = vec![false; n + 1];
+    let n: usize = lines.next().unwrap().unwrap().trim().parse().unwrap();
+    let input_count: usize = lines.next().unwrap().unwrap().trim().parse().unwrap();
 
-    (0..input.trim().parse().unwrap()).for_each(|_| {
-        let mut cp = String::new();
-        reader.read_line(&mut cp).unwrap();
-        let list: Vec<i32> = cp.split_whitespace().flat_map(str::parse::<i32>).collect::<Vec<i32>>();
-        graph[list[0] as usize].push(list[1]);
-        graph[list[1] as usize].push(list[0]); 
-    });
+    let mut graph = vec![vec![]; n + 1];
+    let mut visited = vec![false; n + 1];
+
+    for _ in 0..input_count {
+        if let Some(Ok(line)) = lines.next() {
+            let list: Vec<usize> = line.split_whitespace()
+                                       .map(|s| s.parse().unwrap())
+                                       .collect();
+            if list.len() == 2 {
+                let (u, v) = (list[0], list[1]);
+                graph[u].push(v);
+                graph[v].push(u);
+            }
+        }
+    }
 
     visited[1] = true;
-    let answer: i32 = search(&graph, &mut visited, 1); 
+    let answer = dfs(&graph, &mut visited, 1);
     println!("{}", answer);
 }
 
-fn search(graph: &Vec<Vec<i32>>, visited: &mut Vec<bool>, idx: usize) -> i32 {
-    let mut ans: i32 = 0;
-    for ele in graph[idx].clone() {
-        if ele == 0 {
-            continue;
-        }
-        if !visited[ele as usize] {
-            visited[ele as usize] = true;
-            ans += 1 + search(graph, visited, ele as usize);
-        }
-    }
-    ans
+fn dfs(graph: &[Vec<usize>], visited: &mut [bool], idx: usize) -> i32 {
+    graph[idx]
+        .iter()
+        .filter_map(|&neighbor| {
+            if !visited[neighbor] {
+                visited[neighbor] = true;
+                Some(1 + dfs(graph, visited, neighbor))
+            } else {
+                None
+            }
+        })
+        .sum()
 }
