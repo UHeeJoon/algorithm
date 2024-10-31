@@ -1,24 +1,30 @@
-use std::io::{self, BufRead, BufReader};
+use std::io::{self, BufRead};
 
 fn main() {
-    let mut reader = BufReader::new(io::stdin().lock());
-    let mut input: String = String::new();
-    reader.read_line(&mut input).unwrap();
-    let x_n: Vec<usize> = input.split_whitespace().flat_map(str::parse::<usize>).collect();
-    input.clear();
-    reader.read_line(&mut input).unwrap();
-    let list: Vec<i32> = input.split_whitespace().flat_map(str::parse::<i32>).collect();
+    let stdin = io::stdin();
+    let mut reader = stdin.lock().lines();
 
-    let mut sum: i32 = list[0..x_n[1]].iter().sum();
-    let mut sub: i32 = list[0];
+    // 첫 줄 읽기 및 x_n 파싱
+    let x_n: Vec<usize> = reader.next().unwrap().unwrap()
+        .split_whitespace()
+        .flat_map(str::parse::<usize>)
+        .collect();
+
+    // 두 번째 줄 읽기 및 list 파싱
+    let list: Vec<i32> = reader.next().unwrap().unwrap()
+        .split_whitespace()
+        .flat_map(str::parse::<i32>)
+        .collect();
+
+    let k = x_n[1]; // 슬라이딩 윈도우 크기
+
+    let mut sum: i32 = list[0..k].iter().sum(); // 초기 윈도우 합
     let mut max_val: i32 = sum;
-    let mut max_count: i32 = 1i32;
+    let mut max_count: i32 = 1;
 
-    for day_group in list.windows(x_n[1]).skip(1) {
-        sum -= sub; 
-        sub = day_group[0];
-        sum += day_group[x_n[1] - 1];
-        
+    // 슬라이딩 윈도우로 최대값 계산
+    for i in k..list.len() {
+        sum += list[i] - list[i - k]; // 새로운 값 추가, 오래된 값 제거
         if sum > max_val {
             max_val = sum;
             max_count = 1;
@@ -27,6 +33,7 @@ fn main() {
         }
     }
 
+    // 결과 출력
     if max_val == 0 {
         println!("SAD");
     } else {
